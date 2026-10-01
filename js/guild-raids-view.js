@@ -17,11 +17,11 @@ const WEAKPOINTS = [
     ["vulnCharm", "Buff_Charm.png", "GAME_1397", "Charm"],
 ];
 const RESIST_TYPES = {
-    1: "Sand",
-    2: "Fire",
-    3: "Poison",
-    4: "Dark",
-    5: "Ice",
+    1: "모래",
+    2: "화염",
+    3: "독",
+    4: "어둠",
+    5: "얼음",
 };
 
 const state = {
@@ -164,11 +164,11 @@ function text(key, fallback) {
 }
 
 function getMainName(main) {
-    return text(`GAME_${1260 + main}`, `Raid ${main}`);
+    return text(`GAME_${1260 + main}`, `레이드 ${main}`);
 }
 
 function getBossName(raid) {
-    return text(`UNIT_NAME_${raid.bossKindNum}`, `Boss ${raid.sub}`);
+    return text(`UNIT_NAME_${raid.bossKindNum}`, `보스 ${raid.sub}`);
 }
 
 function showMainView() {
@@ -183,7 +183,7 @@ function showBossListView() {
     hideOtherViews(els.bossListView);
     renderNavbar({ links: defaultNavLinks("Guild Raids") });
     els.bossListBack.href = `#/guild-raids/${state.selectedMain}`;
-    els.bossListTitle.textContent = `${getMainName(state.selectedMain)} - Stage ${state.selectedDifficulty}`;
+    els.bossListTitle.textContent = `${getMainName(state.selectedMain)} - ${state.selectedDifficulty}단계`;
     els.bossList.innerHTML = getBosses(state.selectedMain, state.selectedDifficulty).map(renderBossListItem).join("");
 }
 
@@ -199,7 +199,7 @@ function showDetailView() {
     renderNavbar({ links: defaultNavLinks("Guild Raids") });
     els.detailBack.href = `#/guild-raids/${state.selectedMain}/${state.selectedDifficulty}`;
     els.detailTitle.textContent = getBossName(boss);
-    els.detailMeta.textContent = `${getMainName(boss.main)} / Stage ${boss.difficult} / Boss ${boss.sub} / Lv. ${boss.level} / HP ${formatNumber(boss.hp)}`;
+    els.detailMeta.textContent = `${getMainName(boss.main)} / ${boss.difficult}단계 / 보스 ${boss.sub} / Lv. ${boss.level} / 체력 ${formatNumber(boss.hp)}`;
     els.detailIcon.innerHTML = renderBossIcon(boss, 106, "relic-main-icon-sprite");
     els.detailNavigation.innerHTML = renderBossNavigation(boss);
     els.detailContent.innerHTML = renderBossDetail(boss);
@@ -217,9 +217,9 @@ function renderMainTabs() {
         const available = state.raidsByMain.has(main);
         const active = main === state.selectedMain ? " class=\"active\"" : "";
         if (!available) {
-            return `<li class="disabled"><span aria-disabled="true">Raid ${main}</span></li>`;
+            return `<li class="disabled"><span aria-disabled="true">레이드 ${main}</span></li>`;
         }
-        return `<li${active}><a href="#/guild-raids/${main}">Raid ${main}</a></li>`;
+        return `<li${active}><a href="#/guild-raids/${main}">레이드 ${main}</a></li>`;
     }).join("");
 }
 
@@ -229,8 +229,8 @@ function renderDifficulty(rows) {
     return `
         <a class="guild-raid-difficulty" href="${href}">
             <span class="guild-raid-stage-icon">${renderRaidIcon(`Raid${raid.main}_Main.png`, getMainName(raid.main), 112)}</span>
-            <span class="guild-raid-stage-copy"><strong>Stage ${raid.difficult}</strong><small>${rows.length} bosses / ${raid.limit} hours</small></span>
-            <span class="guild-raid-stage-cost">Open Cost <strong>${formatNumber(raid.openCost)}</strong></span>
+            <span class="guild-raid-stage-copy"><strong>${raid.difficult}단계</strong><small>보스 ${rows.length}마리 / ${raid.limit}시간</small></span>
+            <span class="guild-raid-stage-cost">오픈 비용 <strong>${formatNumber(raid.openCost)}</strong></span>
         </a>
     `;
 }
@@ -252,19 +252,19 @@ function renderBossNavigation(boss) {
     const next = bosses[position + 1];
     const base = `#/guild-raids/${boss.main}/${boss.difficult}`;
     return [
-        previous ? `<a href="${base}/${previous.sub}">Previous Boss</a>` : "<span>Previous Boss</span>",
-        next ? `<a href="${base}/${next.sub}">Next Boss</a>` : "<span>Next Boss</span>",
+        previous ? `<a href="${base}/${previous.sub}">이전 보스</a>` : "<span>이전 보스</span>",
+        next ? `<a href="${base}/${next.sub}">다음 보스</a>` : "<span>다음 보스</span>",
     ].join("");
 }
 
 function renderBossDetail(raid) {
     return [
-        renderPanel("Rewards", renderRewards(raid)),
+        renderPanel("보상", renderRewards(raid)),
         renderPanel(text("GAME_1377", "Attack Patterns"), renderAttackPatterns(raid)),
         renderPanel(text("GAME_1379", "Race Matchup"), renderTribeEffects(raid)),
         renderPanel(text("GAME_1382", "Elemental Resistance"), renderElementalEffects(raid)),
         renderPanel(text("GAME_1385", "Vulnerable Elements"), renderWeakpoints(raid)),
-        renderPanel("Raid Rules", renderRaidRules(raid)),
+        renderPanel("레이드 규칙", renderRaidRules(raid)),
     ].join("");
 }
 
@@ -277,17 +277,17 @@ function renderPetFragments(raid) {
         [raid.petKindNum, raid.numPet],
         [raid.petKindNum2, raid.numPet2],
     ].filter(([kindNum, count]) => kindNum > 0 && count > 0);
-    if (!fragments.length) return "<div class=\"effect-line\">None</div>";
+    if (!fragments.length) return "<div class=\"effect-line\">없음</div>";
     return `<div class="guild-raid-pets">${fragments.map(([kindNum, count]) => {
-        const name = text(`PET_NAME_${kindNum}`, `Pet ${kindNum}`);
+        const name = text(`PET_NAME_${kindNum}`, `펫 ${kindNum}`);
         return `<a href="#/pets/${kindNum}" title="${escapeHtml(name)}">${renderAtlasIconById(state.assetAtlases.pets, kindNum, { label: name, size: 44 })}<span>${escapeHtml(name)} &times; ${count}</span></a>`;
     }).join("")}</div>`;
 }
 
 function renderTribeEffects(raid) {
     const effects = [
-        [raid.plusTribe, raid.plusValue, "Bonus"],
-        [raid.minusTribe, -raid.minusValue, "Penalty"],
+        [raid.plusTribe, raid.plusValue, "유리"],
+        [raid.minusTribe, -raid.minusValue, "불리"],
     ].filter(([tribe, value]) => tribe && value);
     return effects.length
         ? `<div class="guild-raid-tribes">${effects.map(([tribe, value, label]) => `
@@ -296,28 +296,28 @@ function renderTribeEffects(raid) {
                 <strong class="${value > 0 ? "positive" : "negative"}">${formatSignedPercent(value)}</strong>
             </div>
         `).join("")}</div>`
-        : "<div class=\"effect-line\">None</div>";
+        : "<div class=\"effect-line\">없음</div>";
 }
 
 function renderRangeEffects(raid) {
     const effects = [
-        raid.meleeDef ? `<div class="effect-line">Melee damage ${formatSignedPercent(-raid.meleeDef)}</div>` : "",
-        raid.rangeDef ? `<div class="effect-line">Ranged damage ${formatSignedPercent(-raid.rangeDef)}</div>` : "",
+        raid.meleeDef ? `<div class="effect-line">근거리 피해 ${formatSignedPercent(-raid.meleeDef)}</div>` : "",
+        raid.rangeDef ? `<div class="effect-line">원거리 피해 ${formatSignedPercent(-raid.rangeDef)}</div>` : "",
     ].filter(Boolean);
-    return effects.join("") || "<div class=\"effect-line\">None</div>";
+    return effects.join("") || "<div class=\"effect-line\">없음</div>";
 }
 
 function renderElementalEffects(raid) {
-    const type = RESIST_TYPES[raid.resistType] || "None";
-    if (!raid.resistType) return "<div class=\"effect-line\">None</div>";
+    const type = RESIST_TYPES[raid.resistType] || "없음";
+    if (!raid.resistType) return "<div class=\"effect-line\">없음</div>";
     const recommendation = raid.showRecommend === "Y"
-        ? `<div class="effect-line"><strong>Recommended ${type} Resistance: ${raid.recommendResist}</strong></div>`
+        ? `<div class="effect-line"><strong>추천 ${type}저항: ${raid.recommendResist}</strong></div>`
         : "";
     return `
-        <div class="effect-line">This boss uses ${type} attacks. Higher ${type} Resistance reduces damage taken.</div>
+        <div class="effect-line">이 보스는 ${type} 속성 공격을 사용합니다. ${type}저항이 높을수록 받는 피해가 줄어듭니다.</div>
         ${recommendation}
-        <div class="effect-line">Damage dealt: ${raid.dealResistMin} to ${raid.dealResistMax} resistance (${formatMultiplier(raid.dealMultMin)} to ${formatMultiplier(raid.dealMultMax)})</div>
-        <div class="effect-line">Damage received: ${raid.takenResistMin} to ${raid.takenResistMax} resistance (${formatMultiplier(raid.takenMultMin)} to ${formatMultiplier(raid.takenMultMax)})</div>
+        <div class="effect-line">주는 피해: 저항 ${raid.dealResistMin} ~ ${raid.dealResistMax} (${formatMultiplier(raid.dealMultMin)} ~ ${formatMultiplier(raid.dealMultMax)})</div>
+        <div class="effect-line">받는 피해: 저항 ${raid.takenResistMin} ~ ${raid.takenResistMax} (${formatMultiplier(raid.takenMultMin)} ~ ${formatMultiplier(raid.takenMultMax)})</div>
     `;
 }
 
@@ -325,19 +325,19 @@ function renderRewards(raid) {
     return `
         <div class="guild-raid-rewards-grid">
             <div class="guild-raid-reward-group guild-raid-any-attack">
-                <strong>Any Attack</strong>
-                <div class="guild-raid-currency-rewards single">${renderCurrencyReward("GUILD_COIN", "Guild Coin", raid.guildCoin)}</div>
+                <strong>공격 참여</strong>
+                <div class="guild-raid-currency-rewards single">${renderCurrencyReward("GUILD_COIN", "길드코인", raid.guildCoin)}</div>
             </div>
             <div class="guild-raid-reward-group">
-                <strong>Boss Defeat</strong>
+                <strong>보스 처치</strong>
                 <div class="guild-raid-currency-rewards">
-                    ${renderCurrencyReward("RaidCoin_on", "Raid Coin", raid.raidCoin)}
-                    ${renderCurrencyReward("GUILD_COIN", "Guild Coin", raid.claimGuildCoin)}
-                    ${renderCurrencyReward("UI_GEM_ICON", "Gem", raid.gem)}
+                    ${renderCurrencyReward("RaidCoin_on", "레이드 코인", raid.raidCoin)}
+                    ${renderCurrencyReward("GUILD_COIN", "길드코인", raid.claimGuildCoin)}
+                    ${renderCurrencyReward("UI_GEM_ICON", "보석", raid.gem)}
                 </div>
             </div>
             <div class="guild-raid-reward-group">
-                <strong>Pet Fragments</strong>
+                <strong>펫조각</strong>
                 ${renderPetFragments(raid)}
             </div>
         </div>
@@ -363,24 +363,24 @@ function renderWeakpoints(raid) {
                 <div class="guild-raid-weakpoint">
                     ${renderRaidIcon(frameName, label, 42, "guild-raid-weakpoint-icon")}
                     <div>
-                        <div class="guild-raid-weakpoint-title"><strong>${escapeHtml(label)}</strong><span>- Damage taken +${raid[field]}% per hit, stacking</span></div>
+                        <div class="guild-raid-weakpoint-title"><strong>${escapeHtml(label)}</strong><span>- 공격 명중당 받는 피해 +${raid[field]}% 중첩</span></div>
                         ${renderVulnerabilityUnits(field)}
                     </div>
                 </div>
             `;
         });
-    if (!weakpoints.length) return "<div class=\"effect-line\">None</div>";
-    return `<div class="guild-raid-weakpoint-note">The boss is immune to normal status effects. Matching hits increase damage taken, up to +${maximum}% per element.</div><div class="guild-raid-weakpoints">${weakpoints.join("")}</div>`;
+    if (!weakpoints.length) return "<div class=\"effect-line\">없음</div>";
+    return `<div class="guild-raid-weakpoint-note">보스는 모든 상태이상에 면역이지만, 아래 속성의 공격이 명중할 때마다 받는 피해가 중첩됩니다. (속성당 최대 +${maximum}%)</div><div class="guild-raid-weakpoints">${weakpoints.join("")}</div>`;
 }
 
 function renderRaidRules(raid) {
     return [
         renderRangeEffects(raid),
-        raid.shield ? `<div class="effect-line">Shield: ${raid.shield}</div>` : "",
-        raid.incAttack ? `<div class="effect-line">Boss attack increase: ${formatSignedPercent(raid.incAttack * 100)}</div>` : "",
-        raid.decSpeed ? `<div class="effect-line">Ally speed reduction: ${formatSignedPercent(-raid.decSpeed * 100)}</div>` : "",
-        `<div class="effect-line">Crossbows: ${raid.hasCrossbow === "N" ? "Disabled" : "Enabled"}</div>`,
-        `<div class="effect-line">Back attack: ${raid.backAttack === "N" ? "Disabled" : "Enabled"}</div>`,
+        raid.shield ? `<div class="effect-line">보호막: ${raid.shield}</div>` : "",
+        raid.incAttack ? `<div class="effect-line">보스 공격력 증가: ${formatSignedPercent(raid.incAttack * 100)}</div>` : "",
+        raid.decSpeed ? `<div class="effect-line">아군 속도 감소: ${formatSignedPercent(-raid.decSpeed * 100)}</div>` : "",
+        `<div class="effect-line">석궁: ${raid.hasCrossbow === "N" ? "사용 불가" : "사용 가능"}</div>`,
+        `<div class="effect-line">후방공격: ${raid.backAttack === "N" ? "없음" : "있음"}</div>`,
     ].filter(Boolean).join("");
 }
 
@@ -441,7 +441,7 @@ function renderVulnerabilityUnits(field) {
     if (!units.length) return "";
 
     return `<div class="guild-raid-vulnerability-units">${units.map((unit) => {
-        const name = text(`UNIT_NAME_${unit.kindNum}`, unit.name || `Unit ${unit.kindNum}`);
+        const name = text(`UNIT_NAME_${unit.kindNum}`, unit.name || `영웅 ${unit.kindNum}`);
         return `<a href="#/units/${unit.kindNum}" title="${escapeHtml(name)}">${renderVulnerabilityUnitIcon(unit, name)}</a>`;
     }).join("")}</div>`;
 }
@@ -451,9 +451,9 @@ function renderVulnerabilityUnitIcon(unit, label) {
     const frameName = getUnitIconFrameName(unit.kindNum);
     return `
         <span class="guild-raid-unit-portrait" aria-label="${escapeHtml(label)}">
-            <span class="guild-raid-unit-layer">${renderAtlasSprite(`HeroFrame${grade}`, { label: `Grade ${grade} frame`, width: 42 })}</span>
+            <span class="guild-raid-unit-layer">${renderAtlasSprite(`HeroFrame${grade}`, { label: `${grade}등급 테두리`, width: 42 })}</span>
             <span class="guild-raid-unit-crop"><span class="guild-raid-unit-hero">${renderAtlasSprite(frameName, { label, width: 36, missingText: unit.kindNum })}</span></span>
-            <span class="guild-raid-unit-layer">${renderAtlasSprite(`HeroCover${grade}`, { label: `Grade ${grade} cover`, width: 42 })}</span>
+            <span class="guild-raid-unit-layer">${renderAtlasSprite(`HeroCover${grade}`, { label: `${grade}등급 덮개`, width: 42 })}</span>
         </span>
     `;
 }
@@ -502,8 +502,15 @@ function renderAtlasSprite(frameName, options = {}) {
     return `<span class="sprite-icon" role="img" aria-label="${escapeHtml(label)}" style="${outerStyle}"><span class="sprite-icon-canvas" style="${canvasStyle}"><span class="sprite-icon-clip" style="${clipStyle}"><span class="sprite-icon-frame" style="${imageStyle}"></span></span></span></span>`;
 }
 
+const TRIBE_NAMES_KO = {
+    human: "휴먼",
+    elf: "엘프",
+    undead: "언데드",
+    orc: "오크",
+};
+
 function formatTribe(tribe) {
-    return String(tribe).replace(/^./, (letter) => letter.toUpperCase());
+    return TRIBE_NAMES_KO[String(tribe).toLowerCase()] || String(tribe);
 }
 
 function formatSignedPercent(value) {
@@ -516,7 +523,7 @@ function formatMultiplier(value) {
 }
 
 function normalizeAttackPattern(value) {
-    return String(value).replace(/\s+[^\x00-\x7F]+\s+/g, " - ");
+    return String(value).replace(/\s+(?:\u2014|\u00e2\u20ac\u201d)\s+/g, " - ");
 }
 
 function formatCssNumber(value) {
