@@ -4,7 +4,7 @@ export function renderNavbar(options = {}) {
 
     const links = options.links || [];
     const backHref = options.backHref || "";
-    const backText = options.backText || "Back";
+    const backText = options.backText || "뒤로";
     const linkHtml = backHref
         ? `<li><a href="${escapeAttr(backHref)}" id="${escapeAttr(options.backId || "")}">${escapeHtml(backText)}</a></li>`
         : links.map(renderNavLink).join("");
@@ -14,7 +14,7 @@ export function renderNavbar(options = {}) {
             <div class="container">
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navigationbar">
-                        <span class="sr-only">Toggle navigation</span>
+                        <span class="sr-only">메뉴 열기</span>
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
@@ -39,7 +39,7 @@ export function renderFooter(options = {}) {
     target.innerHTML = `
         <footer class="footer relic-footer">
             <div class="container">
-                <span>${escapeHtml(options.text || "Created by Rokhan.")}</span>
+                <span>${escapeHtml(options.text || "Created by Rokhan. 한국어판은 원작자의 저장소를 포크하여 번역한 버전입니다.")}</span>
             </div>
         </footer>
     `;
@@ -56,9 +56,19 @@ export function defaultNavLinks(activeLabel = "") {
     ].map((link) => ({ ...link, active: link.label === activeLabel }));
 }
 
+const NAV_LABELS_KO = {
+    Home: "홈",
+    Units: "영웅",
+    Relics: "유물",
+    Pets: "펫",
+    "Guild Raids": "길드 레이드",
+    "Emblems & Runes": "휘장 & 룬",
+};
+
 function renderNavLink(link) {
     const active = link.active ? " class=\"active\"" : "";
-    return `<li${active}><a href="${escapeAttr(link.href)}">${escapeHtml(link.label)}</a></li>`;
+    const label = NAV_LABELS_KO[link.label] || link.label;
+    return `<li${active}><a href="${escapeAttr(link.href)}">${escapeHtml(label)}</a></li>`;
 }
 
 function bindNavbar() {

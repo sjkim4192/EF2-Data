@@ -28,9 +28,16 @@ export function shouldShowSkill2(treasure) {
     return descParts.length > 1 && Boolean(treasure.skillCode2);
 }
 
+let skillLocale = {};
+
+export function setSkillLocale(locale) {
+    skillLocale = locale || {};
+}
+
 export function skillLabel(skillCode) {
+    if (skillCode && skillLocale[skillCode]) return skillLocale[skillCode];
     const parsed = parseSkillCode(skillCode);
-    if (!parsed) return skillCode || "Unknown effect";
+    if (!parsed) return skillCode || "알 수 없는 효과";
 
     const base = SKILL_LABELS[parsed.buffType] || humanizeSkill(parsed.buffType);
     if (!parsed.target) return base;
@@ -40,7 +47,7 @@ export function skillLabel(skillCode) {
         .map((target) => TARGET_LABELS[target])
         .filter(Boolean);
     if (!targets.length) return base;
-    return `${base} of ${targets.join(", ")}`;
+    return `${targets.join(", ")} ${base}`;
 }
 
 export function getArtifactSet(sets, treasure) {
