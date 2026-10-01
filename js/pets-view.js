@@ -61,18 +61,18 @@ function text(key, fallback) {
 }
 
 function getPetName(pet) {
-    return text(`PET_NAME_${pet.kindNum}`, pet.className || pet.name || `Pet ${pet.kindNum}`);
+    return text(`PET_NAME_${pet.kindNum}`, pet.className || pet.name || `펫 ${pet.kindNum}`);
 }
 
 function getUnitName(kindNum) {
     if (kindNum <= 0) return "";
     const unit = state.unitMap.get(Number(kindNum));
-    return text(`UNIT_NAME_${kindNum}`, unit && unit.name ? unit.name : `Unit ${kindNum}`);
+    return text(`UNIT_NAME_${kindNum}`, unit && unit.name ? unit.name : `영웅 ${kindNum}`);
 }
 
 function getSkillText(skillId) {
     const skill = state.petSkillMap.get(Number(skillId));
-    return text(`PET_${skillId}`, skill && skill.desc ? skill.desc : `Pet Skill ${skillId}`);
+    return text(`PET_${skillId}`, skill && skill.desc ? skill.desc : `펫 스킬 ${skillId}`);
 }
 
 function getMasterSkillText(pet, skillId) {
@@ -142,7 +142,7 @@ function renderListContent() {
     els.content.classList.toggle("icon-grid", state.mode === "images");
     els.content.classList.toggle("text-list", state.mode === "list");
     if (!pets.length) {
-        els.content.textContent = "No pets found.";
+        els.content.textContent = "펫이 없습니다.";
         return;
     }
 
@@ -165,9 +165,9 @@ function renderListTable(pets) {
             <thead>
                 <tr>
                     <th class="id-column">ID</th>
-                    <th>Name</th>
-                    <th>Type</th>
-                    <th>Couple</th>
+                    <th>이름</th>
+                    <th>속성</th>
+                    <th>커플 영웅</th>
                 </tr>
             </thead>
             <tbody>
@@ -208,8 +208,8 @@ function renderDetail() {
 
 function renderPetInfo(pet) {
     return [
-        `<div class="effect-line">+ Pet Points : ${formatValues(pet.incGoldLevel)}</div>`,
-        pet.couple > 0 ? `<div class="effect-line">+ Couple Heroes</div>${renderHeroCoupleLink(pet.couple)}` : "",
+        `<div class="effect-line">+ 펫 포인트 : ${formatValues(pet.incGoldLevel)}</div>`,
+        pet.couple > 0 ? `<div class="effect-line">+ 커플 영웅</div>${renderHeroCoupleLink(pet.couple)}` : "",
     ].filter(Boolean).join("");
 }
 
@@ -231,7 +231,7 @@ function renderUnitPortrait(unit) {
     return `
         <span class="pet-couple-unit-portrait" aria-label="${escapeHtml(name)}">
             <span class="pet-couple-unit-layer">${renderAtlasSprite(`HeroFrame${grade}`, {
-                label: `Grade ${grade} frame`,
+                label: `${grade}등급 테두리`,
                 width: 92,
             })}</span>
             <span class="pet-couple-unit-crop">
@@ -241,7 +241,7 @@ function renderUnitPortrait(unit) {
                 })}</span>
             </span>
             <span class="pet-couple-unit-layer">${renderAtlasSprite(`HeroCover${grade}`, {
-                label: `Grade ${grade} cover`,
+                label: `${grade}등급 덮개`,
                 width: 92,
             })}</span>
         </span>
@@ -250,17 +250,17 @@ function renderUnitPortrait(unit) {
 
 function renderPetSkills(pet) {
     const rows = [
-        renderSkillLine("Skill 1", pet.skill1, pet.value1),
-        renderSkillLine("Skill 2", pet.skill2, pet.value2),
+        renderSkillLine("스킬 1", pet.skill1, pet.value1),
+        renderSkillLine("스킬 2", pet.skill2, pet.value2),
     ];
 
     if (pet.masterSkill && pet.couple > 0) {
         const masterSkillText = getMasterSkillText(pet, pet.masterSkill);
         if (masterSkillText) {
-            rows.push(`<div class="pet-master-skill"><strong class="pet-skill-label">Skill 3:</strong> ${formatMultiline(masterSkillText)}</div>`);
+            rows.push(`<div class="pet-master-skill"><strong class="pet-skill-label">스킬 3:</strong> ${formatMultiline(masterSkillText)}</div>`);
         }
     } else if (pet.masterSkill && hasNonZeroValue(pet.value3)) {
-        rows.push(renderSkillLine("Skill 3", pet.masterSkill, pet.value3));
+        rows.push(renderSkillLine("스킬 3", pet.masterSkill, pet.value3));
     }
 
     return rows.filter(Boolean).join("");
@@ -337,9 +337,18 @@ function bindEvents() {
     });
 }
 
+const PET_TYPES_KO = {
+    neutral: "무속성",
+    wind: "바람",
+    fire: "불",
+    ground: "땅",
+    light: "빛",
+    dark: "어둠",
+    water: "물",
+};
+
 function formatType(type) {
-    return String(type || "unknown")
-        .replace(/^./, (letter) => letter.toUpperCase());
+    return PET_TYPES_KO[type] || String(type || "알 수 없음");
 }
 
 function formatValues(values, options = {}) {
