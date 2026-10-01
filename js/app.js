@@ -151,12 +151,12 @@ import { initUnitsView, renderUnitsRoute } from "./units-view.js?v=e05c1fcbd23b"
         const unitAtlas = atlases.units;
         const iconSize = 72;
         target.innerHTML = [
-            renderAtlasIconById(relicAtlas, 89, { label: "Relic icon", size: iconSize }),
-            renderAtlasIconById(unitAtlas, 69, { label: "Unit icon", size: iconSize }),
-            renderAtlasIconById(petAtlas, 5, { label: "Pet icon", size: iconSize }),
-            renderAtlasIconById(petAtlas, 14, { label: "Pet icon", size: iconSize }),
-            renderAtlasIconById(relicAtlas, 108, { label: "Relic icon", size: iconSize }),
-            renderAtlasIconById(unitAtlas, 89, { label: "Unit icon", size: iconSize }),
+            renderAtlasIconById(relicAtlas, 89, { label: "유물 아이콘", size: iconSize }),
+            renderAtlasIconById(unitAtlas, 69, { label: "영웅 아이콘", size: iconSize }),
+            renderAtlasIconById(petAtlas, 5, { label: "펫 아이콘", size: iconSize }),
+            renderAtlasIconById(petAtlas, 14, { label: "펫 아이콘", size: iconSize }),
+            renderAtlasIconById(relicAtlas, 108, { label: "유물 아이콘", size: iconSize }),
+            renderAtlasIconById(unitAtlas, 89, { label: "영웅 아이콘", size: iconSize }),
         ].join("");
     }
 
@@ -167,7 +167,7 @@ import { initUnitsView, renderUnitsRoute } from "./units-view.js?v=e05c1fcbd23b"
         } catch (error) {
             const title = document.getElementById("artifactTitle");
             const abilityResults = document.getElementById("abilityResults");
-            if (title) title.textContent = "Data load failed";
+            if (title) title.textContent = "데이터를 불러오지 못했습니다";
             if (abilityResults) abilityResults.textContent = error.message;
         }
     }

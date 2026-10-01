@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 
 <head>
     <meta charset="utf-8">
@@ -27,15 +27,15 @@
                 <div class="home-copy">
                     <h1>EF2 Data</h1>
                     <p class="home-summary">
-                        This site provides information about Endless Frontier 2.
+                        엔드리스 프론티어 2의 정보를 제공하는 사이트입니다.
                     </p>
                     <div class="home-actions">
                         <a class="btn btn-default home-secondary-action" href="https://github.com/RokhanHH/EF2-Data" target="_blank" rel="noopener">
-                            View on GitHub
+                            GitHub에서 보기 (원작자)
                         </a>
                     </div>
                 </div>
-                <div class="home-relic-showcase" id="homeRelicShowcase" aria-label="Relic preview"></div>
+                <div class="home-relic-showcase" id="homeRelicShowcase" aria-label="유물 미리보기"></div>
             </div>
         </section>
     </main>
@@ -43,7 +43,7 @@
     <div class="container view-hidden" id="listView">
         <div class="row unit-details">
             <div class="col-md-12 text-center">
-                <h2 class="general-heading relic-book-title">Relic Book</h2>
+                <h2 class="general-heading relic-book-title">유물 도감</h2>
             </div>
 
             <div class="col-md-12 text-center">
@@ -51,14 +51,14 @@
             </div>
 
             <div class="col-md-12 text-center">
-                <div class="view-mode-toggle" role="group" aria-label="Relic view mode">
-                    <button type="button" class="view-mode-btn" data-view-mode="list">Show list</button>
-                    <button type="button" class="view-mode-btn" data-view-mode="images">Show icons</button>
+                <div class="view-mode-toggle" role="group" aria-label="유물 보기 방식">
+                    <button type="button" class="view-mode-btn" data-view-mode="list">목록으로 보기</button>
+                    <button type="button" class="view-mode-btn" data-view-mode="images">아이콘으로 보기</button>
                 </div>
             </div>
 
             <div class="col-md-12">
-                <div class="relic-list-panel artifact-grid" id="artifactContent">Loading relics...</div>
+                <div class="relic-list-panel artifact-grid" id="artifactContent">유물 불러오는 중...</div>
             </div>
         </div>
     </div>
@@ -66,18 +66,18 @@
     <div class="container view-hidden" id="detailView">
         <div class="row unit-details">
             <div class="col-md-12 text-left">
-                <a class="btn btn-default detail-back-link" id="detailBackLink" href="#/relics">Back to Relic List</a>
+                <a class="btn btn-default detail-back-link" id="detailBackLink" href="#/relics">유물 목록으로</a>
                 <div class="relic-header">
                     <span class="relic-main-icon" id="artifactMainIcon"></span>
                     <div>
-                        <h3 class="relic-title" id="artifactTitle">Loading...</h3>
+                        <h3 class="relic-title" id="artifactTitle">불러오는 중...</h3>
                     </div>
                 </div>
 
                 <div class="relic-controls">
                 <form id="calculatorForm" role="form" class="form-horizontal">
                     <div class="col-md-3 calculator-control">
-                        Trans Level
+                        초월 단계
                         <div class="input-group">
                             <span class="input-group-btn">
                                 <button type="button" class="btn btn-default btn-number" data-type="minus" data-field="arttranslevel">
@@ -93,7 +93,7 @@
                         </div>
                     </div>
                     <div class="col-md-3 calculator-control">
-                        Enhancement Level
+                        강화 레벨
                         <div class="input-group">
                             <span class="input-group-btn">
                                 <button type="button" class="btn btn-default btn-number" data-type="minus" data-field="artenhancelevel">
@@ -109,7 +109,7 @@
                         </div>
                     </div>
                     <div class="col-md-3 calculator-control">
-                        Relic Set Level
+                        유물 세트 레벨
                         <div class="input-group">
                             <span class="input-group-btn">
                                 <button type="button" class="btn btn-default btn-number" data-type="minus" data-field="artsetlevel">
@@ -130,8 +130,8 @@
 
             <div class="col-md-12 text-left">
                 <div class="relic-panel">
-                    <h4>Relic Ability</h4>
-                    <div id="abilityResults" class="loading">Loading data...</div>
+                    <h4>유물 능력</h4>
+                    <div id="abilityResults" class="loading">데이터 불러오는 중...</div>
                 </div>
             </div>
 
@@ -145,18 +145,18 @@
 
             <div class="col-md-6 text-left">
                 <div class="relic-panel">
-                <h4>Material Costs <span id="materialCostIcons"></span></h4>
+                <h4>재료 비용 <span id="materialCostIcons"></span></h4>
                 <table style="width:100%" class="table table-condensed">
                     <tr>
-                        <td style="border-top: none !important; width:70%">Opening Cost</td>
+                        <td style="border-top: none !important; width:70%">개방 비용</td>
                         <td style="border-top: none !important; width:30%" id="openingCost">0</td>
                     </tr>
                     <tr>
-                        <td>Next Level Cost</td>
+                        <td>다음 레벨 비용</td>
                         <td id="nextMaterialCost">0</td>
                     </tr>
                     <tr>
-                        <td>Total Material Cost So Far</td>
+                        <td>현재까지 누적 재료 비용</td>
                         <td id="totalMaterialCost">0</td>
                     </tr>
                 </table>
@@ -164,14 +164,14 @@
             </div>
             <div class="col-md-6 text-left">
                 <div class="relic-panel">
-                <h4>Honor Costs <span id="honorCostIcon"></span></h4>
+                <h4>명예코인 비용 <span id="honorCostIcon"></span></h4>
                 <table style="width:100%" class="table table-condensed">
                     <tr>
-                        <td style="border-top: none !important; width:70%">Next Level Cost</td>
+                        <td style="border-top: none !important; width:70%">다음 레벨 비용</td>
                         <td style="border-top: none !important; width:30%" id="nextHonorCost">0</td>
                     </tr>
                     <tr>
-                        <td>Total Honor So Far</td>
+                        <td>현재까지 누적 명예코인</td>
                         <td id="totalHonorCost">0</td>
                     </tr>
                 </table>
@@ -183,7 +183,7 @@
     <div class="container view-hidden" id="unitListView">
         <div class="row unit-details">
             <div class="col-md-12 text-center">
-                <h2 class="general-heading relic-book-title">Unit Book</h2>
+                <h2 class="general-heading relic-book-title">영웅 도감</h2>
             </div>
 
             <div class="col-md-12 text-center">
@@ -191,7 +191,7 @@
             </div>
 
             <div class="col-md-12">
-                <div class="relic-list-panel artifact-grid unit-grid" id="unitContent">Loading units...</div>
+                <div class="relic-list-panel artifact-grid unit-grid" id="unitContent">영웅 불러오는 중...</div>
             </div>
         </div>
     </div>
@@ -199,11 +199,11 @@
     <div class="container view-hidden" id="unitDetailView">
         <div class="row unit-details">
             <div class="col-md-12 text-left">
-                <a class="btn btn-default detail-back-link" id="unitBackLink" href="#/units">Back to Unit List</a>
+                <a class="btn btn-default detail-back-link" id="unitBackLink" href="#/units">영웅 목록으로</a>
                 <div class="relic-header">
                     <span class="relic-main-icon" id="unitMainIcon"></span>
                     <div>
-                        <h3 class="relic-title" id="unitTitle">Loading...</h3>
+                        <h3 class="relic-title" id="unitTitle">불러오는 중...</h3>
                         <div class="relic-meta" id="unitMeta"></div>
                     </div>
                 </div>
@@ -218,18 +218,18 @@
     <div class="container view-hidden" id="petListView">
         <div class="row unit-details">
             <div class="col-md-12 text-center">
-                <h2 class="general-heading relic-book-title">Pet Book</h2>
+                <h2 class="general-heading relic-book-title">펫 도감</h2>
             </div>
 
             <div class="col-md-12 text-center">
-                <div class="view-mode-toggle" role="group" aria-label="Pet view mode">
-                    <button type="button" class="view-mode-btn" data-pet-view-mode="list">Show list</button>
-                    <button type="button" class="view-mode-btn" data-pet-view-mode="images">Show icons</button>
+                <div class="view-mode-toggle" role="group" aria-label="펫 보기 방식">
+                    <button type="button" class="view-mode-btn" data-pet-view-mode="list">목록으로 보기</button>
+                    <button type="button" class="view-mode-btn" data-pet-view-mode="images">아이콘으로 보기</button>
                 </div>
             </div>
 
             <div class="col-md-12">
-                <div class="relic-list-panel artifact-grid pet-grid" id="petContent">Loading pets...</div>
+                <div class="relic-list-panel artifact-grid pet-grid" id="petContent">펫 불러오는 중...</div>
             </div>
         </div>
     </div>
@@ -237,11 +237,11 @@
     <div class="container view-hidden" id="petDetailView">
         <div class="row unit-details">
             <div class="col-md-12 text-left">
-                <a class="btn btn-default detail-back-link" id="petBackLink" href="#/pets">Back to Pet List</a>
+                <a class="btn btn-default detail-back-link" id="petBackLink" href="#/pets">펫 목록으로</a>
                 <div class="relic-header">
                     <span class="relic-main-icon" id="petMainIcon"></span>
                     <div>
-                        <h3 class="relic-title" id="petTitle">Loading...</h3>
+                        <h3 class="relic-title" id="petTitle">불러오는 중...</h3>
                         <div class="relic-meta" id="petMeta"></div>
                     </div>
                 </div>
@@ -249,14 +249,14 @@
 
             <div class="col-md-12 text-left">
                 <div class="relic-panel">
-                    <h4>Pet Info</h4>
+                    <h4>펫 정보</h4>
                     <div id="petInfo"></div>
                 </div>
             </div>
 
             <div class="col-md-12 text-left">
                 <div class="relic-panel">
-                    <h4>Pet Skills</h4>
+                    <h4>펫 스킬</h4>
                     <div id="petSkills"></div>
                 </div>
             </div>
@@ -266,16 +266,16 @@
     <div class="container view-hidden" id="guildRaidMainView">
         <div class="row unit-details">
             <div class="col-md-12 text-center">
-                <h2 class="general-heading relic-book-title guild-raid-heading">Guild Raids</h2>
+                <h2 class="general-heading relic-book-title guild-raid-heading">길드 레이드</h2>
             </div>
             <div class="col-md-12 text-center">
                 <ul class="pagination pagination-sm grade-tabs guild-raid-tabs" id="guildRaidMainTabs"></ul>
             </div>
             <div class="col-md-12 text-left">
-                <h4 class="relic-title" id="guildRaidMainTitle">Loading...</h4>
+                <h4 class="relic-title" id="guildRaidMainTitle">불러오는 중...</h4>
             </div>
             <div class="col-md-12">
-                <div class="relic-list-panel guild-raid-difficulties" id="guildRaidDifficultyList">Loading raids...</div>
+                <div class="relic-list-panel guild-raid-difficulties" id="guildRaidDifficultyList">레이드 불러오는 중...</div>
             </div>
         </div>
     </div>
@@ -283,11 +283,11 @@
     <div class="container view-hidden" id="guildRaidBossListView">
         <div class="row unit-details">
             <div class="col-md-12 text-left">
-                <a class="btn btn-default detail-back-link" id="guildRaidBossListBack" href="#/guild-raids/1">Back to Stage List</a>
-                <h3 class="relic-title" id="guildRaidBossListTitle">Loading...</h3>
+                <a class="btn btn-default detail-back-link" id="guildRaidBossListBack" href="#/guild-raids/1">단계 목록으로</a>
+                <h3 class="relic-title" id="guildRaidBossListTitle">불러오는 중...</h3>
             </div>
             <div class="col-md-12">
-                <div class="relic-list-panel guild-raid-boss-list" id="guildRaidBossList">Loading bosses...</div>
+                <div class="relic-list-panel guild-raid-boss-list" id="guildRaidBossList">보스 불러오는 중...</div>
             </div>
         </div>
     </div>
@@ -295,11 +295,11 @@
     <div class="container view-hidden" id="guildRaidDetailView">
         <div class="row unit-details">
             <div class="col-md-12 text-left">
-                <a class="btn btn-default detail-back-link" id="guildRaidDetailBack" href="#/guild-raids/1/1">Back to Boss List</a>
+                <a class="btn btn-default detail-back-link" id="guildRaidDetailBack" href="#/guild-raids/1/1">보스 목록으로</a>
                 <div class="relic-header">
                     <span class="relic-main-icon" id="guildRaidDetailIcon"></span>
                     <div>
-                        <h3 class="relic-title" id="guildRaidDetailTitle">Loading...</h3>
+                        <h3 class="relic-title" id="guildRaidDetailTitle">불러오는 중...</h3>
                         <div class="relic-meta" id="guildRaidDetailMeta"></div>
                     </div>
                 </div>
@@ -312,7 +312,7 @@
     <div class="container view-hidden" id="emblemsRunesView">
         <div class="row unit-details">
             <div class="col-md-12 emblem-landing" id="emblemLanding">
-                <div class="emblem-grid" id="emblemGrid">Loading emblems...</div>
+                <div class="emblem-grid" id="emblemGrid">휘장 불러오는 중...</div>
             </div>
             <div class="col-md-12" id="selectedEmblemContent"></div>
         </div>

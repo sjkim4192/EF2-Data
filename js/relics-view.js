@@ -11,6 +11,7 @@ import {
     getSetValues,
     getTreasureValue,
     materialCostForLevel,
+    setSkillLocale,
     shouldShowSkill2,
     skillLabel,
     totalMaterialCost,
@@ -38,6 +39,7 @@ export async function initRelicsView() {
 
     els = getElements();
     Object.assign(state, await loadRelicData());
+    setSkillLocale(state.locale);
     readRoute();
     bindEvents();
     state.initialized = true;
@@ -117,7 +119,7 @@ function renderSetIcons(set, treasure) {
     els.icons.innerHTML = set.itemList.map((kindNum) => {
         const item = state.treasureMap.get(kindNum);
         const inactive = kindNum === treasure.kindNum ? "" : " inactive";
-        const name = item ? getTreasureName(item) : `Artifact ${kindNum}`;
+        const name = item ? getTreasureName(item) : `유물 ${kindNum}`;
         const icon = renderRelicIcon(kindNum, {
             label: name,
             className: `icon-48 artifact-icon${inactive}`,
@@ -178,18 +180,18 @@ function renderAbilities(treasure, trans, enhance) {
 
 function renderSet(set, setLevel, trans) {
     if (!set) {
-        els.setTitle.textContent = "No Artifact Set";
+        els.setTitle.textContent = "세트 없음";
         els.setEffects.innerHTML = "";
         return;
     }
 
-    els.setTitle.textContent = `${getSetName(set)} +${setLevel} (+${setLevel} Artifacts Required)`;
+    els.setTitle.textContent = `${getSetName(set)} +${setLevel} (유물 +${setLevel} 필요)`;
     els.setEffects.innerHTML = set.skillList.map((skills, tierIndex) => {
         const required = set.numSetList[tierIndex] || set.itemList.length;
         const values = getSetValues(set, trans, tierIndex);
         const tierClass = tierIndex === 0 ? "active" : "muted";
         return `<div class="set-tier ${tierClass}">` + [
-            `<div class="set-tier-title">Set Effect ${tierIndex + 1} (${required}/${set.itemList.length})</div>`,
+            `<div class="set-tier-title">세트 효과 ${tierIndex + 1} (${required}/${set.itemList.length})</div>`,
             ...skills.map((skillCode, index) => {
                 const value = values[index] || 0;
                 return `<div class="effect-line">+ ${escapeHtml(skillLabel(skillCode))} : ${formatNumber(value)}%</div>`;
@@ -208,7 +210,7 @@ function renderCosts(treasure, enhance) {
         }) : "")
         .join("");
     els.honorCostIcon.innerHTML = renderAtlasIcon(state.assetAtlases.ui, "UI_COIN_Big", {
-        label: "Honor coin",
+        label: "명예코인",
         className: "icon-h4",
         size: 20,
     });
@@ -313,7 +315,7 @@ function renderListContent() {
     els.content.classList.toggle("icon-grid", state.mode === "images");
     els.content.classList.toggle("text-list", state.mode === "list");
     if (!treasures.length) {
-        els.content.textContent = "No relics for this grade.";
+        els.content.textContent = "이 등급의 유물이 없습니다.";
         return;
     }
 
@@ -344,8 +346,8 @@ function renderListTable(treasures) {
             <thead>
                 <tr>
                     <th class="id-column">ID</th>
-                    <th>Set</th>
-                    <th>Name</th>
+                    <th>세트</th>
+                    <th>이름</th>
                 </tr>
             </thead>
             <tbody>
