@@ -4,10 +4,10 @@ import { defaultNavLinks, renderNavbar } from "./layout.js?v=e05c1fcbd23b";
 import { escapeHtml, formatNumber } from "./utils.js?v=e05c1fcbd23b";
 
 const TRIBES = [
-    { id: 1, label: "Human" },
-    { id: 2, label: "Elf" },
-    { id: 3, label: "Undead" },
-    { id: 4, label: "Orc" },
+    { id: 1, label: "휴먼" },
+    { id: 2, label: "엘프" },
+    { id: 3, label: "언데드" },
+    { id: 4, label: "오크" },
 ];
 
 const DETAIL_TABS = ["details", "skills", "ascend"];
@@ -76,7 +76,7 @@ function text(key, fallback) {
 }
 
 function getUnitName(unit) {
-    return text(`UNIT_NAME_${unit.kindNum}`, unit.name || `Unit ${unit.kindNum}`);
+    return text(`UNIT_NAME_${unit.kindNum}`, unit.name || `영웅 ${unit.kindNum}`);
 }
 
 function readRoute() {
@@ -147,7 +147,7 @@ function renderListContent() {
     els.content.classList.add("icon-grid");
 
     if (!units.length) {
-        els.content.textContent = "No units for this race.";
+        els.content.textContent = "이 종족의 영웅이 없습니다.";
         return;
     }
 
@@ -221,7 +221,7 @@ function renderGameDetail(unit) {
                     <div class="unit-game-title-row">
                         <div class="unit-title-stack">
                             <h3>${escapeHtml(name)}</h3>
-                            <span class="unit-stars" aria-label="${unit.grade} stars">${renderRarity(unit.grade)}</span>
+                            <span class="unit-stars" aria-label="${unit.grade}성">${renderRarity(unit.grade)}</span>
                         </div>
                         <span class="unit-header-badges">${renderHeaderBadges(unit)}</span>
                     </div>
@@ -282,7 +282,7 @@ function renderUnitPortrait(unit) {
     return `
         <div class="unit-portrait" aria-label="${escapeHtml(getUnitName(unit))}">
             <span class="unit-portrait-layer unit-portrait-frame">${renderAtlasSprite(`HeroFrame${grade}`, {
-                label: `Grade ${grade} frame`,
+                label: `${grade}등급 테두리`,
                 width: 112,
             })}</span>
             <span class="unit-portrait-crop">
@@ -292,7 +292,7 @@ function renderUnitPortrait(unit) {
                 })}</span>
             </span>
             <span class="unit-portrait-layer unit-portrait-cover">${renderAtlasSprite(`HeroCover${grade}`, {
-                label: `Grade ${grade} cover`,
+                label: `${grade}등급 덮개`,
                 width: 112,
             })}</span>
         </div>
@@ -306,7 +306,7 @@ function renderUnitListPortrait(unit) {
     return `
         <span class="unit-list-portrait" aria-label="${escapeHtml(name)}">
             <span class="unit-list-layer">${renderAtlasSprite(`HeroFrame${grade}`, {
-                label: `Grade ${grade} frame`,
+                label: `${grade}등급 테두리`,
                 width: 92,
             })}</span>
             <span class="unit-list-crop">
@@ -316,7 +316,7 @@ function renderUnitListPortrait(unit) {
                 })}</span>
             </span>
             <span class="unit-list-layer">${renderAtlasSprite(`HeroCover${grade}`, {
-                label: `Grade ${grade} cover`,
+                label: `${grade}등급 덮개`,
                 width: 92,
             })}</span>
         </span>
@@ -341,27 +341,27 @@ function renderDetailsTab(unit) {
 
     return `
         <div class="unit-quick-stats">
-            ${renderQuickStat("UI_ATTACK_SPEED", "Atk Spd", formatDisplayAttackSpeed(unit.atkSpd))}
-            ${renderQuickStat("UI_MOVE_SPEED", "Move Spd", formatDisplayMoveSpeed(unit.moveSpd))}
-            ${renderQuickStat("ICON_OPEN", "Recovery", `${formatStat(unit.recovery)}%`)}
-            ${renderQuickStat("UI_ATTACK_RANGE", "Range", formatStat(unit.atkRange))}
+            ${renderQuickStat("UI_ATTACK_SPEED", "공격속도", formatDisplayAttackSpeed(unit.atkSpd))}
+            ${renderQuickStat("UI_MOVE_SPEED", "이동속도", formatDisplayMoveSpeed(unit.moveSpd))}
+            ${renderQuickStat("ICON_OPEN", "회복력", `${formatStat(unit.recovery)}%`)}
+            ${renderQuickStat("UI_ATTACK_RANGE", "공격거리", formatStat(unit.atkRange))}
         </div>
         <div class="unit-text-panel unit-details-panel">
             <section>
-                <h4># Basic Attack</h4>
+                <h4># 기본 공격</h4>
                 <p>${formatMultiline(normalAttack)}</p>
             </section>
             <section>
-                <h4># Skill</h4>
+                <h4># 스킬</h4>
                 <p>${formatMultiline(skillAttack)}</p>
             </section>
             <section>
-                <h4># Race Traits</h4>
+                <h4># 종족 특성</h4>
                 <p>${renderRaceTraits(unit)}</p>
             </section>
             ${uniqueSkills.length ? `
                 <section class="unit-unique-skill">
-                    <h4># Unique Skill</h4>
+                    <h4># 고유스킬</h4>
                     <ul class="unit-unique-skill-list">
                         ${uniqueSkills.map((skill) => `<li>${formatMultiline(skill.desc)}</li>`).join("")}
                     </ul>
@@ -375,7 +375,7 @@ function renderDetailsTab(unit) {
 function renderSkillsTab(unit) {
     const rows = unit.goldBuffs.slice(0, GOLD_BUFF_UNLOCK_LEVELS.length).map((skillId, index) => {
         const skill = state.heroGoldSkillMap.get(skillId);
-        const label = text(`HERO_GOLD_SKILL_DESC_${skillId}`, skill && skill.desc ? skill.desc : `Skill ${skillId}`);
+        const label = text(`HERO_GOLD_SKILL_DESC_${skillId}`, skill && skill.desc ? skill.desc : `스킬 ${skillId}`);
         const value = unit.goldBuffValues[index] || 0;
         const skillCode = skill && skill.skillCode ? skill.skillCode : "";
         return `
@@ -383,7 +383,7 @@ function renderSkillsTab(unit) {
                 <div class="unit-skill-card-icon">${renderSkillCardIcon(skillCode)}</div>
                 <div class="unit-skill-card-copy">
                     <div class="unit-skill-card-name">${escapeHtml(label)}</div>
-                    <div class="unit-skill-card-condition">Activation Condition : Lv.${GOLD_BUFF_UNLOCK_LEVELS[index]}</div>
+                    <div class="unit-skill-card-condition">발동 조건 : Lv.${GOLD_BUFF_UNLOCK_LEVELS[index]}</div>
                 </div>
                 <div class="unit-skill-card-power">
                     <div>+${escapeHtml(formatStat(value))}%</div>
@@ -393,7 +393,7 @@ function renderSkillsTab(unit) {
         `;
     });
 
-    if (!rows.length) return `<div class="unit-text-panel">No skills found.</div>`;
+    if (!rows.length) return `<div class="unit-text-panel">스킬 정보가 없습니다.</div>`;
 
     return `
         <div class="unit-text-panel unit-skills-panel">
@@ -406,10 +406,10 @@ function renderAscendTab(unit) {
     const materialGroups = [unit.material1, unit.material2, unit.material3];
     const rows = materialGroups.map((materials, index) => `
         <section class="unit-material-group">
-            <h4># Trans Material ${index + 1}</h4>
+            <h4># ${index + 1}차 초월 재료</h4>
             ${renderMaterialTotal(materials, index)}
             <div class="unit-material-icons">
-                ${materials.length ? materials.map((kindNum) => renderMaterialUnit(kindNum)).join("") : "<span>No materials</span>"}
+                ${materials.length ? materials.map((kindNum) => renderMaterialUnit(kindNum)).join("") : "<span>재료 없음</span>"}
             </div>
         </section>
     `);
@@ -422,13 +422,13 @@ function renderMaterialTotal(materials, index) {
 
     return `
         <div class="unit-material-total">
-            <span>Total</span>
+            <span>합계</span>
             <span class="unit-honor-cost">${renderAtlasIcon(state.assetAtlases.units, "UI_COIN_Big", {
-                label: "Honor coin",
+                label: "명예코인",
                 size: 18,
             })}${escapeHtml(formatStat(TRANS_HONOR_COIN_COSTS[index] || 0))}</span>
             <span class="unit-evolution-cost">${renderAtlasIcon(state.assetAtlases.units, "UI_GEM_ICON", {
-                label: "Gem",
+                label: "보석",
                 size: 18,
             })}${escapeHtml(formatStat(totalEvolutionCost(materials)))}</span>
         </div>
@@ -468,14 +468,14 @@ function renderCouplePet(unit) {
     if (!pet) {
         return `
             <section class="unit-couple-pet empty">
-                <h4># Couple pet</h4>
+                <h4># 커플 펫</h4>
             </section>
         `;
     }
-    const name = text(`PET_NAME_${pet.kindNum}`, pet.className || pet.name || `Pet ${pet.kindNum}`);
+    const name = text(`PET_NAME_${pet.kindNum}`, pet.className || pet.name || `펫 ${pet.kindNum}`);
     return `
         <section class="unit-couple-pet">
-            <h4># Couple pet</h4>
+            <h4># 커플 펫</h4>
             <a href="#/pets/${pet.kindNum}" title="${escapeHtml(name)}">${renderAtlasIconById(state.assetAtlases.pets, pet.kindNum, {
                 label: name,
                 size: 58,
@@ -486,12 +486,12 @@ function renderCouplePet(unit) {
 
 function renderRaceTraits(unit) {
     const traits = [
-        unit.stunImmune === "Y" ? "Stun Immunity" : "",
-        unit.freezeImmune === "Y" ? "Freeze Immunity" : "",
-        unit.blowImmune === "Y" ? "Blow Immunity" : "",
-        unit.knockImmune === "Y" ? "Knockback Immunity" : "",
+        unit.stunImmune === "Y" ? "기절 면역" : "",
+        unit.freezeImmune === "Y" ? "빙결 면역" : "",
+        unit.blowImmune === "Y" ? "블로우 면역" : "",
+        unit.knockImmune === "Y" ? "넉백 면역" : "",
     ].filter(Boolean);
-    return traits.length ? escapeHtml(traits.join(", ")) : "None";
+    return traits.length ? escapeHtml(traits.join(", ")) : "없음";
 }
 
 function renderCoreStat(frameName, value) {
@@ -505,7 +505,7 @@ function renderHeaderBadges(unit) {
     return [
         renderAtlasBadge(tribeIconFrame(unit.tribe), getTribeName(unit.tribe)),
         renderAtlasBadge(genderIconFrame(unit.sex), formatGender(unit.sex)),
-        unit.detect === "Y" ? renderAtlasBadge("DETECT_ICON", "Detects stealth") : "",
+        unit.detect === "Y" ? renderAtlasBadge("DETECT_ICON", "은신 감지") : "",
     ].filter(Boolean).join("");
 }
 
@@ -530,16 +530,16 @@ function genderIconFrame(sex) {
 }
 
 function formatGender(sex) {
-    if (sex === "F") return "Female";
-    if (sex === "N") return "Neutral";
-    return "Male";
+    if (sex === "F") return "여성";
+    if (sex === "N") return "중성";
+    return "남성";
 }
 
 function renderSkillIcon(skillCode) {
     const parts = String(skillCode || "").split("_");
     const buffCode = parts.length > 1 ? parts[1] : parts[0];
     return renderAtlasIcon(state.assetAtlases.unitSkills, `Icon_Skill_${buffCode}`, {
-        label: skillCode || "Skill",
+        label: skillCode || "스킬",
         className: "unit-skill-icon",
         size: 18,
     });
@@ -552,7 +552,7 @@ function renderSkillCardIcon(skillCode) {
     return `
         <span class="unit-skill-card-icon-stack">
             ${renderAtlasIcon(state.assetAtlases.unitSkills, `Icon_Skill_${buffCode}`, {
-                label: skillCode || "Skill",
+                label: skillCode || "스킬",
                 size: 80,
             })}
             ${targetCode ? renderAtlasIcon(state.assetAtlases.unitSkills, targetIconFrame(targetCode), {
@@ -585,7 +585,7 @@ function tribeIconFrame(tribe) {
 
 function renderMaterialUnit(kindNum) {
     const unit = state.unitMap.get(kindNum);
-    const name = unit ? getUnitName(unit) : `Unit ${kindNum}`;
+    const name = unit ? getUnitName(unit) : `영웅 ${kindNum}`;
     return `
         <span class="unit-material-item">
             <a href="#/units/${kindNum}" title="${escapeHtml(name)}">${renderUnitPortraitMini(kindNum, name)}</a>
@@ -597,7 +597,7 @@ function renderMaterialUnit(kindNum) {
 function renderEvolutionCost(unit) {
     const cost = getEvolutionCost(unit);
     return `<span class="unit-evolution-cost">${renderAtlasIcon(state.assetAtlases.units, "UI_GEM_ICON", {
-        label: "Gem",
+        label: "보석",
         size: 16,
     })}${cost ? escapeHtml(formatStat(cost)) : "-"}</span>`;
 }
@@ -613,7 +613,7 @@ function renderUnitPortraitMini(kindNum, label) {
     return `
         <span class="unit-material-portrait">
             <span class="unit-material-layer">${renderAtlasSprite(`HeroFrame${grade}`, {
-                label: `Grade ${grade} frame`,
+                label: `${grade}등급 테두리`,
                 width: 78,
             })}</span>
             <span class="unit-material-crop">
@@ -623,7 +623,7 @@ function renderUnitPortraitMini(kindNum, label) {
                 })}</span>
             </span>
             <span class="unit-material-layer">${renderAtlasSprite(`HeroCover${grade}`, {
-                label: `Grade ${grade} cover`,
+                label: `${grade}등급 덮개`,
                 width: 78,
             })}</span>
         </span>
@@ -643,7 +643,7 @@ function writeListRoute() {
 
 function getTribeName(tribeId) {
     const tribe = TRIBES.find((item) => item.id === tribeId);
-    return tribe ? tribe.label : "Unknown";
+    return tribe ? tribe.label : "알 수 없음";
 }
 
 function formatUnitType(unit) {
@@ -655,14 +655,20 @@ function formatDamageType(dmgType) {
     return dmgType === "P" ? "Physical" : "Magical";
 }
 
+const TAB_NAMES_KO = {
+    details: "상세 정보",
+    skills: "스킬",
+    ascend: "초월",
+};
+
 function formatTabName(tab) {
-    return tab.replace(/^./, (letter) => letter.toUpperCase());
+    return TAB_NAMES_KO[tab] || tab;
 }
 
 function renderRarity(grade) {
     const normalizedGrade = Math.min(Math.max(Number(grade) || 1, 1), 7);
     return renderAtlasIcon(state.assetAtlases.units, `UI_UNIT_RARE${String(normalizedGrade).padStart(4, "0")}`, {
-        label: `${normalizedGrade} stars`,
+        label: `${normalizedGrade}성`,
         size: 72,
     });
 }
