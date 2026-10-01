@@ -33,50 +33,59 @@ const RUNE_ICON_PREFIXES = {
 };
 
 const FILTER_LABELS = {
-    ALL: "All units",
-    HUMAN: "Human units",
-    ELF: "Elf units",
-    UNDEAD: "Undead units",
-    ORC: "Orc units",
-    HERO: "Hero only",
-    SOLDIER: "Soldiers only",
-    MELEE: "Melee units",
-    RANGED: "Ranged units",
+    ALL: "전체 유닛",
+    HUMAN: "휴먼 유닛",
+    ELF: "엘프 유닛",
+    UNDEAD: "언데드 유닛",
+    ORC: "오크 유닛",
+    HERO: "영웅만",
+    SOLDIER: "병사만",
+    MELEE: "근거리유닛",
+    RANGED: "원거리유닛",
 };
 
 const CONDITION_LABELS = {
-    ALWAYS: "Always Active",
-    ACTIVE: "Active",
-    PERIODIC: "Periodic",
-    ON_HIT: "On Hit",
-    ON_DAMAGED: "When Hit",
-    ON_STACK: "On Stack",
-    ON_INTERRUPT: "On Interrupt",
-    ON_INTERRUPT_FAIL: "On Interrupt Fail",
-    ON_GROGGY_START: "On Groggy Start",
-    ON_HP_LOW: "On Low HP",
-    ON_WEAKPOINT_HIT: "On Weak Point Hit",
-    ON_FIRE: "On Fire",
-    ON_ACTIVE_CAST: "On Active Cast",
-    DURING_ACTIVE: "During Active",
-    ON_ACTIVE_END: "On Active End",
+    ALWAYS: "상시 발동",
+    ACTIVE: "액티브",
+    PERIODIC: "주기적",
+    ON_HIT: "공격 적중 시",
+    ON_DAMAGED: "피격 시",
+    ON_STACK: "중첩 시",
+    ON_INTERRUPT: "차단 성공 시",
+    ON_INTERRUPT_FAIL: "차단 실패 시",
+    ON_GROGGY_START: "그로기 시작 시",
+    ON_HP_LOW: "체력 낮을 때",
+    ON_WEAKPOINT_HIT: "약점 적중 시",
+    ON_FIRE: "발사 시",
+    ON_ACTIVE_CAST: "액티브 시전 시",
+    DURING_ACTIVE: "액티브 지속 중",
+    ON_ACTIVE_END: "액티브 종료 시",
 };
 
 const TARGET_LABELS = {
-    CORP: "Equipped Legion",
-    SELF: "Active",
-    RAID: "All Legions",
-    BOSS: "Boss",
-    CROSSBOW: "Crossbow",
+    CORP: "장착 군단",
+    SELF: "액티브",
+    RAID: "전 군단",
+    BOSS: "보스",
+    CROSSBOW: "석궁",
+};
+
+const ROLE_NAMES_KO = {
+    TANK: "탱커",
+    DEALER: "딜러",
+    HEALER: "힐러",
+    SUPPORT: "서포터",
+    BREAKER: "브레이커",
+    CROSSBOW: "석궁",
 };
 
 const ACTIVE_TITLES = {
-    61: "Taunt",
-    62: "Burst",
-    63: "Mass Heal",
-    64: "Weaken Boss",
-    65: "All-Out Attack",
-    66: "Wound Rend",
+    61: "도발",
+    62: "폭딜",
+    63: "광역 치유",
+    64: "보스 약화",
+    65: "총공격",
+    66: "상처 가르기",
 };
 
 const state = {
@@ -235,22 +244,22 @@ function renderSelectedEmblem() {
     const runes = getRunesForEmblem(emblem);
 
     return `
-        <a class="btn btn-default detail-back-link" href="#/emblems-runes">Back to Emblems</a>
+        <a class="btn btn-default detail-back-link" href="#/emblems-runes">휘장 목록으로</a>
         <section class="relic-panel emblem-summary-panel">
             <div class="emblem-summary-title">
-                <h3 class="relic-title">${escapeHtml(getEmblemName(emblem))} <span class="emblem-summary-meta">${escapeHtml(emblem.role)} &middot; Rune type ${escapeHtml(emblem.runeType)}</span></h3>
+                <h3 class="relic-title">${escapeHtml(getEmblemName(emblem))} <span class="emblem-summary-meta">${escapeHtml(ROLE_NAMES_KO[emblem.role] || emblem.role)} &middot; 룬 타입 ${escapeHtml(emblem.runeType)}</span></h3>
             </div>
             <div class="emblem-summary-content">
                 <span class="emblem-summary-icon">${renderEmblemBackground(emblem)}${renderEmblemIcon(emblem, 118)}</span>
                 <div class="emblem-effects">
-                    ${renderEmblemEffect("Passive", passive, emblem.pValue)}
-                    ${renderEmblemEffect("Active", active, emblem.aValue, emblem)}
+                    ${renderEmblemEffect("패시브", passive, emblem.pValue)}
+                    ${renderEmblemEffect("액티브", active, emblem.aValue, emblem)}
                 </div>
             </div>
         </section>
         ${renderRuneDetail(emblem, state.selectedRune, state.selectedGrade)}
         <section class="relic-panel emblem-runes-panel">
-            <h4>Compatible Runes <span class="emblem-rune-count">${runes.length}</span></h4>
+            <h4>장착 가능한 룬 <span class="emblem-rune-count">${runes.length}</span></h4>
             <div class="emblem-rune-list" id="emblemRuneList" data-emblem-id="${emblem.kindNum}">${runes.map(renderRuneRow).join("")}</div>
         </section>
     `;
@@ -261,8 +270,8 @@ function renderEmblemEffect(label, skill, value, emblem) {
     const activeDisplay = emblem ? getActiveEffectDisplay(skill, value) : null;
     if (emblem) {
         badges.push(
-            { label: `Duration: ${formatValue(emblem.aDur)}s`, className: "timing" },
-            { label: `Cooldown: ${formatValue(emblem.aCool)}s`, className: "timing" },
+            { label: `지속시간: ${formatValue(emblem.aDur)}초`, className: "timing" },
+            { label: `재사용 대기시간: ${formatValue(emblem.aCool)}초`, className: "timing" },
         );
     }
     return `
@@ -285,11 +294,11 @@ function renderRuneRow(rune) {
     return `
         <div class="emblem-rune-row">
             <div class="emblem-rune-copy">
-                <strong>Rune #${rune.kindNum}</strong>
+                <strong>룬 #${rune.kindNum}</strong>
                 ${renderRuneInfoBadges(skill)}
                 <small>${escapeHtml(formatEffect(skill, rune.values[firstAvailableGrade - 1] || 0))}</small>
             </div>
-            <div class="rune-grade-selector" aria-label="Grades for rune ${rune.kindNum}">
+            <div class="rune-grade-selector" aria-label="룬 ${rune.kindNum} 등급">
                 ${state.grades.map((grade) => renderGradeButton(rune, grade.grade)).join("")}
             </div>
         </div>
@@ -301,7 +310,7 @@ function renderGradeButton(rune, grade) {
     const selected = state.selectedRune && state.selectedRune.kindNum === rune.kindNum && state.selectedGrade === grade;
     const className = `rune-grade-option${selected ? " active" : ""}${available ? "" : " unavailable"}`;
     const icon = renderRuneIcon(rune, grade, 40);
-    const label = `${getGradeName(grade)}${available ? "" : " (unavailable)"}`;
+    const label = `${getGradeName(grade)}${available ? "" : " (없음)"}`;
 
     if (!available) {
         return `<span class="${className}" aria-label="${escapeHtml(label)}" aria-disabled="true">${icon}</span>`;
@@ -318,8 +327,8 @@ function renderRuneDetail(emblem, rune, grade) {
     if (!rune) {
         return `
             <section class="relic-panel rune-detail-panel rune-selection-prompt">
-                <h4>Rune Details</h4>
-                <p>Select a rune grade to view its effect.</p>
+                <h4>룬 상세</h4>
+                <p>룬 등급을 선택하면 효과를 볼 수 있습니다.</p>
             </section>
         `;
     }
@@ -327,8 +336,8 @@ function renderRuneDetail(emblem, rune, grade) {
     if (!grade) {
         return `
             <section class="relic-panel rune-detail-panel rune-selection-prompt">
-                <h4>Rune #${rune.kindNum}</h4>
-                <p>Select one of its available grades to view the effect.</p>
+                <h4>룬 #${rune.kindNum}</h4>
+                <p>선택 가능한 등급 중 하나를 고르면 효과를 볼 수 있습니다.</p>
             </section>
         `;
     }
@@ -341,9 +350,9 @@ function renderRuneDetail(emblem, rune, grade) {
             <div class="rune-detail-header">
                 ${renderRuneIcon(rune, grade, 64)}
                 <div>
-                    <h4>Rune #${rune.kindNum} &middot; ${escapeHtml(getGradeName(grade))}</h4>
+                    <h4>룬 #${rune.kindNum} &middot; ${escapeHtml(getGradeName(grade))}</h4>
                     ${renderRuneInfoBadges(skill)}
-                    <div class="rune-detail-meta">For ${escapeHtml(getEmblemName(emblem))} &middot; Applies to: ${escapeHtml(getFilterLabel(rune.filter))}</div>
+                    <div class="rune-detail-meta">${escapeHtml(getEmblemName(emblem))} 전용 &middot; 적용 대상: ${escapeHtml(getFilterLabel(rune.filter))}</div>
                 </div>
             </div>
             <div class="rune-selected-effect">${escapeHtml(formatEffect(skill, value))}</div>
@@ -381,17 +390,17 @@ function renderEmblemBackground(emblem) {
 function renderRuneIcon(rune, grade, size) {
     const prefix = RUNE_ICON_PREFIXES[rune.type];
     return renderAtlasIcon(state.assetAtlases.raids, `${prefix}_${String(grade).padStart(2, "0")}.png`, {
-        label: `Rune ${rune.kindNum}, ${getGradeName(grade)}`,
+        label: `룬 ${rune.kindNum}, ${getGradeName(grade)}`,
         size,
     });
 }
 
 function getEmblemName(emblem) {
-    return state.locale[`EmblemName${emblem.kindNum}`] || `${emblem.className} Emblem`;
+    return state.locale[`EmblemName${emblem.kindNum}`] || `${emblem.className} 휘장`;
 }
 
 function getGradeName(grade) {
-    return state.locale[`EmblemGradeName${grade}`] || `Grade ${grade}`;
+    return state.locale[`EmblemGradeName${grade}`] || `${grade}등급`;
 }
 
 function getFilterLabel(filter) {
@@ -415,8 +424,8 @@ function renderSubOptions(subOptions, grade) {
 
     return `
         <div class="rune-sub-options">
-            <h5>Possible Sub Options</h5>
-            <p>One random option can be added to a ${escapeHtml(getGradeName(grade))} rune.</p>
+            <h5>추가 가능한 부가 옵션</h5>
+            <p>${escapeHtml(getGradeName(grade))} 등급 룬에는 아래 옵션 중 하나가 무작위로 추가될 수 있습니다.</p>
             <div class="rune-sub-option-list">
                 ${subOptions.map((sub) => {
                     const skill = state.skillMap.get(sub.skillRef);
@@ -435,7 +444,7 @@ function renderSubOptions(subOptions, grade) {
 function getActiveEffectDisplay(skill, value) {
     const effect = formatEffect(skill, value);
     const parts = effect.split(/\s+(?:\u2014|\u00e2\u20ac\u201d)\s+/);
-    const title = ACTIVE_TITLES[skill && skill.kindNum] || parts[0] || "Active";
+    const title = ACTIVE_TITLES[skill && skill.kindNum] || parts[0] || "액티브";
     const description = parts.length > 1 ? parts.slice(1).join(" — ") : effect;
     return { title, description };
 }
@@ -459,8 +468,8 @@ function renderInfoBadges(badges) {
 }
 
 function formatEffect(skill, value) {
-    if (!skill) return `Value: ${formatValue(value)}`;
-    const template = state.locale[`EmblemDesc${skill.kindNum}`] || skill.id || "Effect {v}";
+    if (!skill) return `수치: ${formatValue(value)}`;
+    const template = state.locale[`EmblemDesc${skill.kindNum}`] || skill.id || "효과 {v}";
     return template.replace(/\{v\}/g, formatValue(value));
 }
 
